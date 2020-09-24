@@ -2,6 +2,8 @@ package com.danilolosi.algafoodapi.infrastructure.repository;
 
 import com.danilolosi.algafoodapi.domain.model.Cozinha;
 import com.danilolosi.algafoodapi.domain.repository.CozinhaRepository;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -33,11 +35,17 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
     public Cozinha salvar(Cozinha cozinha) {
         return manager.merge(cozinha);
     }
-
+    
+    @Transactional
     @Override
-    public void remover(Cozinha cozinha) {
-        System.out.println(cozinha);
-        Cozinha cozinhaFind = buscar(cozinha.getId());
-        manager.remove(cozinhaFind);
+    public void remover(Long id) {
+        
+        Cozinha cozinha = buscar(id);
+        
+        if(cozinha == null) {
+        	throw new EmptyResultDataAccessException(1);
+        }
+        
+        manager.remove(cozinha);
     }
 }
