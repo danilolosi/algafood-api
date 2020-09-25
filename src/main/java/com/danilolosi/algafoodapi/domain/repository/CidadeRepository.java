@@ -4,10 +4,11 @@ import com.danilolosi.algafoodapi.domain.model.Cidade;
 
 import java.util.List;
 
-public interface CidadeRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-    List<Cidade> listar();
-    Cidade buscar(Long id);
-    Cidade salvar(Cidade cidade);
-    void remover(Long id);
+@Repository
+public interface CidadeRepository extends JpaRepository<Cidade, Long> {
+
+	
 }

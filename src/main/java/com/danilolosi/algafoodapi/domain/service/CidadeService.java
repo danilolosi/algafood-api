@@ -22,21 +22,19 @@ public class CidadeService {
 	public Cidade salvar(Cidade cidade) {
 		
 		Long estadoId = cidade.getEstado().getId();
-		Estado estado = estadorepository.buscar(estadoId);
+		Estado estado = estadorepository
+				.findById(estadoId)
+				.orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Estado com id: %d não foi encontrado", estadoId)));
 		
-		if(estado == null) {
-			throw new EntidadeNaoEncontradaException(
-					String.format("Estado com id: %d não foi encontrado", estadoId));
-		}
 		
 		cidade.setEstado(estado);
-		return cidadeRepository.salvar(cidade);
+		return cidadeRepository.save(cidade);
 	}
 	
 	public void remover(Long id) {
 		
 		try {
-			cidadeRepository.remover(id);
+			cidadeRepository.deleteById(id);
 		}catch (EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.format("Cidade com id: %d não existe", id));
 		}
