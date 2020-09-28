@@ -1,6 +1,7 @@
 package com.danilolosi.algafoodapi.api.controller;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -53,6 +54,17 @@ public class RestauranteController {
 		
 		return ResponseEntity.notFound().build();
 	}
+	
+	@GetMapping("/nome-taxafrete")
+	public ResponseEntity<List<Restaurante>> listarPorNomeETaxaFrete(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
+		
+		List<Restaurante> restaurantes = restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
+		return ResponseEntity.ok(restaurantes);
+	}
+	
+	
+	
+	
 	
 	@PostMapping
 	public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante){
