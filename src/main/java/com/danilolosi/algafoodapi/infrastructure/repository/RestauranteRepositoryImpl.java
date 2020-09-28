@@ -1,13 +1,16 @@
 package com.danilolosi.algafoodapi.infrastructure.repository;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -23,29 +26,27 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryCustomize
 	
 	public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal){
 		
-		var jpql = new StringBuilder();
-		Map<String, Object> parametros = new HashMap<>();
+		CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+		CriteriaQuery<Restaurante> criteriaQuery = criteriaBuilder.createQuery(Restaurante.class);
+		Root<Restaurante> root = criteriaQuery.from(Restaurante.class);
 		
-		jpql.append("from Restaurante where 0 = 0 ");
+		var predicates = new ArrayList<Predicate>();
 		
 		if(StringUtils.hasLength(nome)) {
-			jpql.append("and nome like :nome ");
-			parametros.put("nome", "%" + nome + "%");
+			predicates.add(criteriaBuilder.like(root.get("nome"), "%" + nome + "%"));
 		}
 		
 		if(taxaFreteInicial != null) {
-			jpql.append("and taxaFrete >= :taxaFreteInicial ");
-			parametros.put("taxaFreteInicial", taxaFreteInicial);
+			predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial));
 		}
 		
 		if(taxaFreteFinal != null) {
-			jpql.append("and taxaFrete <= :taxaFreteFinal");
-			parametros.put("taxaFreteFinal", taxaFreteFinal);
+			predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
 		}
 		
-		TypedQuery<Restaurante> query = manager.createQuery(jpql.toString(), Restaurante.class);
+		criteriaQuery.where(predicates.toArray(new Predicate[0]));
 		
-		parametros.forEach((chave, valor) -> query.setParameter(chave, valor));
+		TypedQuery<Restaurante> query = manager.createQuery(criteriaQuery);
 		
 		return query.getResultList();
 	}
