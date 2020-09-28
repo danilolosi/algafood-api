@@ -67,9 +67,7 @@ public class RestauranteController {
 	@GetMapping("/nome-taxagratis")
 	public ResponseEntity<List<Restaurante>> listarPorNomeETaxaFrete(String nome){
 		
-		List<Restaurante> restaurantes = restauranteRepository.findAll(
-				RestauranteSpecs.comFreteGratis()
-				.and(RestauranteSpecs.comNomeSemelhante(nome)));
+		List<Restaurante> restaurantes = restauranteRepository.findComFreteGratis(nome);
 		
 		return ResponseEntity.ok(restaurantes);
 	}

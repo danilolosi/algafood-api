@@ -9,5 +9,7 @@ public interface RestauranteRepositoryCustomized {
 	
 	//Exemplo de consulta com uma implementação desta interface feita pelo Spring Data JPA
 		List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
+		
+		List<Restaurante> findComFreteGratis(String nome);
 
 }
