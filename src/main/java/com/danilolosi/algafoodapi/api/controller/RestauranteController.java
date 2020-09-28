@@ -24,8 +24,7 @@ import com.danilolosi.algafoodapi.domain.exception.EntidadeNaoEncontradaExceptio
 import com.danilolosi.algafoodapi.domain.model.Restaurante;
 import com.danilolosi.algafoodapi.domain.repository.RestauranteRepository;
 import com.danilolosi.algafoodapi.domain.service.RestauranteService;
-import com.danilolosi.algafoodapi.infrastructure.repository.spec.RestauranteComFreteGratisSpec;
-import com.danilolosi.algafoodapi.infrastructure.repository.spec.RestauranteComNomeSemelhanteSpec;
+import com.danilolosi.algafoodapi.infrastructure.repository.spec.RestauranteSpecs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -68,10 +67,10 @@ public class RestauranteController {
 	@GetMapping("/nome-taxagratis")
 	public ResponseEntity<List<Restaurante>> listarPorNomeETaxaFrete(String nome){
 		
-		var comFreteGratisSpec = new RestauranteComFreteGratisSpec();
-		var comNomeSemelhanteSpec = new RestauranteComNomeSemelhanteSpec(nome); 
+		List<Restaurante> restaurantes = restauranteRepository.findAll(
+				RestauranteSpecs.comFreteGratis()
+				.and(RestauranteSpecs.comNomeSemelhante(nome)));
 		
-		List<Restaurante> restaurantes = restauranteRepository.findAll(comFreteGratisSpec.and(comNomeSemelhanteSpec));
 		return ResponseEntity.ok(restaurantes);
 	}
 	
