@@ -19,11 +19,11 @@ import org.springframework.util.StringUtils;
 
 import com.danilolosi.algafoodapi.domain.model.Restaurante;
 import com.danilolosi.algafoodapi.domain.repository.RestauranteRepository;
-import com.danilolosi.algafoodapi.domain.repository.RestauranteRepositoryCustomized;
+import com.danilolosi.algafoodapi.domain.repository.RestauranteRepositoryCustom;
 import com.danilolosi.algafoodapi.infrastructure.repository.spec.RestauranteSpecs;
 
 @Repository
-public class RestauranteRepositoryImpl implements RestauranteRepositoryCustomized {
+public class RestauranteRepositoryImpl implements RestauranteRepositoryCustom {
 
 	@PersistenceContext
 	private EntityManager manager;

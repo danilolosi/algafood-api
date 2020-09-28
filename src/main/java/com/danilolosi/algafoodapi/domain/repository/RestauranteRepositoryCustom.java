@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.danilolosi.algafoodapi.domain.model.Restaurante;
 
-public interface RestauranteRepositoryCustomized {
+public interface RestauranteRepositoryCustom {
 	
 	//Exemplo de consulta com uma implementação desta interface feita pelo Spring Data JPA
 		List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
