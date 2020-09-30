@@ -24,7 +24,6 @@ import com.danilolosi.algafoodapi.domain.exception.EntidadeNaoEncontradaExceptio
 import com.danilolosi.algafoodapi.domain.model.Restaurante;
 import com.danilolosi.algafoodapi.domain.repository.RestauranteRepository;
 import com.danilolosi.algafoodapi.domain.service.RestauranteService;
-import com.danilolosi.algafoodapi.infrastructure.repository.spec.RestauranteSpecs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController

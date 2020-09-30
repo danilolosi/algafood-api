@@ -7,6 +7,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface JpaRepositoryCustom<T, ID> extends JpaRepository<T, ID> {
-
+	
 	Optional<T> buscarPrimeiro();
+	
 }
