@@ -14,7 +14,7 @@ import com.danilolosi.algafoodapi.domain.model.Restaurante;
 @Repository
 public interface RestauranteRepository extends JpaRepositoryCustom<Restaurante, Long>, RestauranteRepositoryCustom, JpaSpecificationExecutor<Restaurante> {
 	
-	@Query("select distinct r from Restaurante r join fetch r.cozinha left join fetch r.formasPagamento")
+	@Query("select distinct r from Restaurante r join fetch r.cozinha")
 	List<Restaurante> findAll();
 
 	//Exempo de JPQL com @Query
