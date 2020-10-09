@@ -1,7 +1,6 @@
 package com.danilolosi.algafoodapi.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.danilolosi.algafoodapi.domain.exception.EntidadeEmUsoException;
-import com.danilolosi.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.danilolosi.algafoodapi.domain.model.Cozinha;
 import com.danilolosi.algafoodapi.domain.repository.CozinhaRepository;
 import com.danilolosi.algafoodapi.domain.service.CozinhaService;
@@ -39,13 +36,8 @@ public class CozinhaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cozinha> buscar(@PathVariable Long id){
-        Optional<Cozinha> cozinha = cozinhaRepository.findById(id);
-
-        if(cozinha.isPresent()) 
-        	return ResponseEntity.ok(cozinha.get());
-
-        return ResponseEntity.notFound().build();
+    public Cozinha buscar(@PathVariable Long id){
+    	return cozinhaService.buscarOuFalhar(id);
     }
 
     @PostMapping
@@ -55,17 +47,12 @@ public class CozinhaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cozinha> atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha){
-
-        Optional<Cozinha> cozinhaAtual = cozinhaRepository.findById(id);
-
-        if(cozinhaAtual.isPresent()){
-            BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id");
-            Cozinha cozinhaSalva = cozinhaService.salvar(cozinhaAtual.get());
-            return ResponseEntity.ok().body(cozinhaSalva);
-        }
-
-        return ResponseEntity.notFound().build();
+    public Cozinha atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha){
+    	
+    	Cozinha cozinhaAtual = cozinhaService.buscarOuFalhar(id);
+    	
+    	BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+    	return cozinhaService.salvar(cozinhaAtual);
     }
 
     @DeleteMapping("/{id}")
