@@ -74,7 +74,4 @@ public class CidadeController {
 	public void remover(@PathVariable Long id){
 		cidadeService.remover(id);
 	}
-	
-	
-	
 }
