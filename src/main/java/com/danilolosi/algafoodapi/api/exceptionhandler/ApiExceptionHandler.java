@@ -1,7 +1,5 @@
 package com.danilolosi.algafoodapi.api.exceptionhandler;
 
-import java.time.LocalDateTime;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,37 +17,61 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
 	public ResponseEntity<?> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex, WebRequest request){
-		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+		
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		ErrorType errorType = ErrorType.ENTIDADE_NAO_ENCONTRADA;
+		String detail = ex.getMessage();
+		
+		Error error = createErrorBuilder(errorType, status, detail).build();
+
+		return handleExceptionInternal(ex, error, new HttpHeaders(), status ,request);
 	}
 
 	@ExceptionHandler(EntidadeEmUsoException.class)
 	public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request){
-		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT ,request);
+		
+		HttpStatus status = HttpStatus.CONFLICT;
+		ErrorType errorType = ErrorType.ENTIDADE_EM_USO;
+		String detail = ex.getMessage();
+		
+		Error error = createErrorBuilder(errorType, status, detail).build();
+		
+		return handleExceptionInternal(ex, error, new HttpHeaders(), status ,request);
 	}
 	
 	@ExceptionHandler(NegocioException.class)
-	public ResponseEntity<?> handlerNegocioException(NegocioException ex, WebRequest request){	
-		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST ,request);	
+	public ResponseEntity<?> handleNegocioException(NegocioException ex, WebRequest request){	
+		
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ErrorType errorType = ErrorType.ERRO_NEGOCIO;
+		String detail = ex.getMessage();
+		
+		Error error = createErrorBuilder(errorType, status, detail).build();
+		
+		return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST ,request);	
 	}
 	
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 		
-		if(body == null) {
-			body = Erro.builder()
-					.dataHora(LocalDateTime.now())
-					.mensagem(status.getReasonPhrase())
-					.build();
-			
-		}else if(body instanceof String) {
-			
-			body = Erro.builder()
-					.dataHora(LocalDateTime.now())
-					.mensagem((String) body)
-					.build();
-		}
+		if(body == null) 
+			body = createErrorBuilder(status).build();	
 		
 		return super.handleExceptionInternal(ex, body, headers, status, request);
+	}
+	
+	private Error.ErrorBuilder createErrorBuilder(ErrorType errorType, HttpStatus status, String detail) {
+		return Error.builder()
+				.status(status.value())
+				.type(errorType.getUri())
+				.title(errorType.getTitle())
+				.detail(detail);
+	}
+	
+	private Error.ErrorBuilder createErrorBuilder(HttpStatus status) {
+		return Error.builder()
+		.title(status.getReasonPhrase())
+		.status(status.value());
 	}
 }
