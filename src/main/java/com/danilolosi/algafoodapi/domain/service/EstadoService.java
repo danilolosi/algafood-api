@@ -6,7 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.danilolosi.algafoodapi.domain.exception.EntidadeEmUsoException;
-import com.danilolosi.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
+import com.danilolosi.algafoodapi.domain.exception.EstadoNaoEncontradoException;
 import com.danilolosi.algafoodapi.domain.model.Estado;
 import com.danilolosi.algafoodapi.domain.repository.EstadoRepository;
 
@@ -14,7 +14,7 @@ import com.danilolosi.algafoodapi.domain.repository.EstadoRepository;
 public class EstadoService {
 	
 	private static final String MSG_ESTADO_EM_USO = "Não foi possível excluir o estado com id: %d, pois está em uso";
-	private static final String MSG_ESTADO_NAO_ENCONTRADO = "Estado com id: %d, não foi encontrado";
+
 	@Autowired
 	private EstadoRepository estadoRepository;
 
@@ -29,8 +29,7 @@ public class EstadoService {
 			estadoRepository.deleteById(id);
 			
 		}catch (EmptyResultDataAccessException e) {	
-			throw new EntidadeNaoEncontradaException(
-					String.format(MSG_ESTADO_NAO_ENCONTRADO, id));
+			throw new EstadoNaoEncontradoException(id);
 			
 		}catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
@@ -40,8 +39,7 @@ public class EstadoService {
 	
 	public Estado buscarOuFalhar(Long id) {
 		return estadoRepository.findById(id)
-				.orElseThrow(() -> new EntidadeNaoEncontradaException(
-						String.format(MSG_ESTADO_NAO_ENCONTRADO, id)));
+				.orElseThrow(() -> new EstadoNaoEncontradoException(id));
 	}
 	
 	

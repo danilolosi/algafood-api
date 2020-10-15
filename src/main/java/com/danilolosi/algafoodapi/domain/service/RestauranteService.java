@@ -3,7 +3,7 @@ package com.danilolosi.algafoodapi.domain.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.danilolosi.algafoodapi.domain.exception.EntidadeNaoEncontradaException;
+import com.danilolosi.algafoodapi.domain.exception.RestauranteNaoEncontradoException;
 import com.danilolosi.algafoodapi.domain.model.Cozinha;
 import com.danilolosi.algafoodapi.domain.model.Restaurante;
 import com.danilolosi.algafoodapi.domain.repository.RestauranteRepository;
@@ -11,7 +11,6 @@ import com.danilolosi.algafoodapi.domain.repository.RestauranteRepository;
 @Service
 public class RestauranteService {
 	
-	private static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Não existe um cadastro de restaurante com código %d";
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
@@ -31,8 +30,7 @@ public class RestauranteService {
 	public Restaurante buscarOuFalhar(Long id) {
 		
 		return restauranteRepository.findById(id)
-				.orElseThrow(() -> new EntidadeNaoEncontradaException(
-						String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id)));
+				.orElseThrow(() -> new RestauranteNaoEncontradoException(id));
 		
 	}
 	
