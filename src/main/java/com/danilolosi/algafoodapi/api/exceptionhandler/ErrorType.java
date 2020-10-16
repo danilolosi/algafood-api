@@ -9,7 +9,8 @@ public enum ErrorType {
 	ENTIDADE_EM_USO("Entidade em uso", "/entidade-em-uso"),
 	ERRO_NEGOCIO("Violação de regra de negócio", "/erro-negocio"),
 	MENSAGEM_INCOMPREENSIVEL("Mensagem incompreensível", "/mensagem-incompreensivel"),
-	PARAMETRO_INVALIDO("Parâmetro inválido", "/parametro-invalido");
+	PARAMETRO_INVALIDO("Parâmetro inválido", "/parametro-invalido"),
+	ERRO_DE_SISTEMA("Erro de sistema", "/erro-de-sistema");
 	
 	private String title;
 	private String uri;
