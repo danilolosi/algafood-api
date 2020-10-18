@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.danilolosi.algafoodapi.Groups;
+import com.danilolosi.algafoodapi.core.validation.Groups;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

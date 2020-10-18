@@ -7,7 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.danilolosi.algafoodapi.Groups;
+import com.danilolosi.algafoodapi.core.validation.Groups;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
