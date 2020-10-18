@@ -10,6 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -28,7 +30,31 @@ import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	private static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro inesperado no sistema. Se o problema persistir, entre em contato com o administrador do sistema";
-
+	
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
+		ErrorType errorType = ErrorType.DADOS_INVALIDOS;
+		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+		
+		BindingResult bindingResult = ex.getBindingResult();
+		
+		List<Error.Field> errorFields = bindingResult.getFieldErrors().stream()
+				.map(fieldError -> Error.Field.builder()
+						.name(fieldError.getField())
+						.userMessage(fieldError.getDefaultMessage())
+						.build())
+				.collect(Collectors.toList());
+		
+		Error error = createErrorBuilder(errorType, status, detail)
+				.userMessage("Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.")
+				.fields(errorFields)
+				.build();
+		
+		return handleExceptionInternal(ex, error ,headers, status, request);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleUncaught(Exception ex, WebRequest request){
 		
