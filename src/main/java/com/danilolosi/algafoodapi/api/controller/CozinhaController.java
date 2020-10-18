@@ -2,6 +2,8 @@ package com.danilolosi.algafoodapi.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +43,7 @@ public class CozinhaController {
     }
 
     @PostMapping
-    public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha){
+    public ResponseEntity<Cozinha> salvar(@RequestBody @Valid Cozinha cozinha){
     	Cozinha novaCozinha = cozinhaService.salvar(cozinha);
     	return ResponseEntity.status(HttpStatus.CREATED).body(novaCozinha);
     }
