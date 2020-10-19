@@ -26,13 +26,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.danilolosi.algafoodapi.core.validation.Groups;
-import com.danilolosi.algafoodapi.core.validation.Multiplo;
 import com.danilolosi.algafoodapi.core.validation.TaxaFrete;
+import com.danilolosi.algafoodapi.core.validation.ValorZeroIncluiDescricao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode
 @Entity
@@ -49,7 +50,6 @@ public class Restaurante {
     
     @NotNull
     @TaxaFrete
-    @Multiplo(numero = 5)
     @Column(nullable = false)
     private BigDecimal taxaFrete;
     

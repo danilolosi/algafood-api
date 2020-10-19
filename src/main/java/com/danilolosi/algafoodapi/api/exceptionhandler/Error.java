@@ -20,7 +20,7 @@ public class Error {
 	private String detail;
 	private String userMessage;
 	private LocalDateTime timestamp;
-	private List<Field> fields;
+	private List<Field> objects;
 	
 	@Getter
 	@Builder
