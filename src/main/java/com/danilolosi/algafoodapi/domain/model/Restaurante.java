@@ -26,6 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.danilolosi.algafoodapi.core.validation.Groups;
+import com.danilolosi.algafoodapi.core.validation.Multiplo;
 import com.danilolosi.algafoodapi.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -48,6 +49,7 @@ public class Restaurante {
     
     @NotNull
     @TaxaFrete
+    @Multiplo(numero = 5)
     @Column(nullable = false)
     private BigDecimal taxaFrete;
     
